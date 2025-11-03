@@ -8,8 +8,8 @@ pipeline {
   }
 
   environment {
-    # ---- Tunables your test/app can read ----
-    WAIT_TIMEOUT_MS           = '30000'   // how long to wait for app to be ready
+    // ---- Tunables your test/app can read ----
+    WAIT_TIMEOUT_MS           = '30000'   // how long to wait for app readiness
     NAV_TIMEOUT               = '7000'
     SCREENSHOT_EVERY_ACTION   = 'false'
     SCREENSHOT_ON_FAILURE     = 'true'
@@ -19,11 +19,11 @@ pipeline {
     PYTHONDONTWRITEBYTECODE   = '1'
     PYTHONUNBUFFERED          = '1'
 
-    # ---- Paths ----
+    // ---- Paths ----
     APP_DIR                   = 'oracle_demo'           // where app.py lives
     REPORT_DIR                = 'dd_reports'            // where tests write reports
 
-    # ---- Tools (adjust if your Python is elsewhere) ----
+    // ---- Tools (adjust if Python lives elsewhere) ----
     PY                        = 'python'
   }
 
@@ -35,7 +35,7 @@ pipeline {
             branches: [[name: '*/main']],
             userRemoteConfigs: [[
               url: 'https://github.com/harshita978/testautomationdemo.git',
-              credentialsId: 'github-pat' // remove if public
+              credentialsId: 'github-pat' // remove if repo is public
             ]]
           ])
           bat 'git --version'
@@ -72,7 +72,6 @@ pipeline {
 
           if not exist "%APP_DIR%\\app.py" (
             echo ERROR: Expected app at "%APP_DIR%\\app.py" but not found.
-            type nul
             exit /b 1
           )
         '''
@@ -88,19 +87,16 @@ pipeline {
           "%PY%" -V
           "%PY%" -m pip install -U pip setuptools wheel
 
-          rem Install test requirements (repo root or RUN_DIR)
           if exist "%RUN_DIR%\\requirements.txt" (
             "%PY%" -m pip install -r "%RUN_DIR%\\requirements.txt"
           ) else (
             "%PY%" -m pip install playwright reportlab matplotlib
           )
 
-          rem Install app requirements if present
           if exist "%APP_DIR%\\requirements.txt" (
             "%PY%" -m pip install -r "%APP_DIR%\\requirements.txt"
           )
 
-          rem Install Playwright browsers
           "%PY%" -m playwright install
         '''
       }
@@ -108,31 +104,26 @@ pipeline {
 
     stage('Start App (background)') {
       steps {
-        script {
-          // Launch app.py in background with PowerShell and capture PID
-          bat '''
-            powershell -NoProfile -ExecutionPolicy Bypass ^
-              "$p = Start-Process -FilePath '%PY%' -ArgumentList 'app.py' -WorkingDirectory '%APP_DIR%' -PassThru; ^
-               $p.Id | Out-File -FilePath app_pid.txt -Encoding ascii; ^
-               Write-Host ('App PID: ' + $p.Id)"
+        bat '''
+          powershell -NoProfile -ExecutionPolicy Bypass ^
+            "$p = Start-Process -FilePath '%PY%' -ArgumentList 'app.py' -WorkingDirectory '%APP_DIR%' -PassThru; ^
+             $p.Id | Out-File -FilePath app_pid.txt -Encoding ascii; ^
+             Write-Host ('App PID: ' + $p.Id)"
 
-            rem Wait for health (http://127.0.0.1:5000) up to WAIT_TIMEOUT_MS
-            set /a limit_ms=%WAIT_TIMEOUT_MS%
-            set start_ms=!time!
-            powershell -NoProfile -ExecutionPolicy Bypass ^
-              "$deadline = (Get-Date).AddMilliseconds([int]$env:WAIT_TIMEOUT_MS); ^
-               while ((Get-Date) -lt $deadline) { ^
-                 try { Invoke-WebRequest -Uri '%START_URL%/' -UseBasicParsing -TimeoutSec 2 | Out-Null; exit 0 } ^
-                 catch { Start-Sleep -Milliseconds 500 } ^
-               }; exit 1"
-            if errorlevel 1 (
-              echo ERROR: App did not become ready on %START_URL% within %WAIT_TIMEOUT_MS% ms
-              type app_pid.txt
-              exit /b 1
-            )
-            echo App is up at %START_URL%
-          '''
-        }
+          rem Wait until %START_URL% responds (up to WAIT_TIMEOUT_MS)
+          powershell -NoProfile -ExecutionPolicy Bypass ^
+            "$deadline = (Get-Date).AddMilliseconds([int]$env:WAIT_TIMEOUT_MS); ^
+             while ((Get-Date) -lt $deadline) { ^
+               try { Invoke-WebRequest -Uri '%START_URL%/' -UseBasicParsing -TimeoutSec 2 | Out-Null; exit 0 } ^
+               catch { Start-Sleep -Milliseconds 500 } ^
+             }; exit 1"
+          if errorlevel 1 (
+            echo ERROR: App did not become ready on %START_URL% within %WAIT_TIMEOUT_MS% ms
+            type app_pid.txt
+            exit /b 1
+          )
+          echo App is up at %START_URL%
+        '''
       }
     }
 
@@ -165,7 +156,6 @@ pipeline {
 
     stage('Summarize (latest run)') {
       steps {
-        // show where the timestamped folder is and print results.txt if present
         bat '''
           if not exist "%REPORT_DIR%" (
             echo No %REPORT_DIR% directory found (maybe runner wrote elsewhere)
@@ -184,9 +174,7 @@ pipeline {
 
     stage('Archive Reports') {
       steps {
-        // archive all PDFs/CSVs/TXTs under dd_reports regardless of pass/fail
         archiveArtifacts artifacts: 'dd_reports/**/*.pdf, dd_reports/**/*.csv, dd_reports/**/*.txt', allowEmptyArchive: true, onlyIfSuccessful: false
-        // fallback (if your runner sometimes writes here)
         archiveArtifacts artifacts: 'test-automation-demo/dd_reports/**/*.pdf, test-automation-demo/dd_reports/**/*.csv, test-automation-demo/dd_reports/**/*.txt', allowEmptyArchive: true, onlyIfSuccessful: false
       }
     }
@@ -195,8 +183,6 @@ pipeline {
   post {
     always {
       echo "Pipeline finished with status: ${currentBuild.currentResult}"
-
-      // Cleanly stop the Flask app if it was started
       bat '''
         if exist app_pid.txt (
           set /p APPPID=<app_pid.txt
@@ -206,7 +192,7 @@ pipeline {
       '''
     }
     failure {
-      echo 'Build FAILED (infra/script error). Any generated reports above were still archived.'
+      echo 'Build FAILED (infra/script error). Reports (if any) are archived above.'
     }
     unstable {
       echo 'Tests reported failures. Build marked UNSTABLE; reports archived.'
