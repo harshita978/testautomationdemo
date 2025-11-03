@@ -1,49 +1,60 @@
 pipeline {
-  agent any      // runs on your Windows Jenkins controller
+  agent any
 
-  options { timeout(time: 30, unit: 'MINUTES') }
+  options {
+    timeout(time: 30, unit: 'MINUTES')
+    ansiColor('xterm')
+  }
+
+  tools {
+    git 'DefaultGit'   // matches the name you set in Global Tool Configuration
+  }
 
   environment {
-    WAIT_TIMEOUT = '3000'
-    NAV_TIMEOUT  = '7000'
-    SCREENSHOT_EVERY_ACTION   = 'false'
-    SCREENSHOT_ON_FAILURE     = 'true'
-    SCREENSHOT_ON_SUCCESS_END = 'false'
-    FULL_PAGE_SHOTS           = 'false'
-    START_URL = ''            // optional override
-
-    PYTHONDONTWRITEBYTECODE = '1'
-    PYTHONUNBUFFERED = '1'
+    // add anything you need here, e.g. TEST_ENV = 'dev'
   }
 
   stages {
     stage('Checkout') {
-      steps { checkout scm }
-    }
-
-    stage('Setup Python & Playwright') {
       steps {
-        powershell '''
-          python -V
-          python -m pip install -U pip setuptools wheel
-          python -m pip install -r test-automation-demo/requirements.txt
-          python -m playwright install
-        '''
+        checkout([
+          $class: 'GitSCM',
+          branches: [[name: '*/main']],
+          userRemoteConfigs: [[
+            url: 'https://github.com/<your-username>/<repo>.git',
+            // remove the next line if your repo is public
+            credentialsId: 'github-pat'
+          ]]
+        ])
+        bat 'git --version'
       }
     }
 
-    stage('Run tests') {
+    stage('Build') {
       steps {
-        dir('test-automation-demo') {
-          powershell 'python runtest_data_driven_template.py'
-        }
+        bat 'echo Building...'
+        // bat 'mvn -B -DskipTests package'   // example for Maven
+      }
+    }
+
+    stage('Test') {
+      steps {
+        bat 'echo Running tests...'
+        // bat 'pytest -q'                    // example for Python
+        // junit 'reports/**/*.xml'           // publish results if you produce JUnit XML
+      }
+    }
+
+    stage('Archive') {
+      steps {
+        archiveArtifacts artifacts: 'dist/**, build/**, target/**/*.jar', onlyIfSuccessful: true
       }
     }
   }
 
   post {
     always {
-      archiveArtifacts artifacts: 'test-automation-demo/dd_reports/**', fingerprint: true
+      echo "Pipeline finished with status: ${currentBuild.currentResult}"
     }
   }
 }
