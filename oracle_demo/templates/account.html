@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="center-card">
+    <div class="card login-card" style="width:520px">
+      <h2>Account Details</h2>
+      <form method="post" action="{{ url_for('account', next=next_url) }}">
+        <label>Full Name</label>
+        <input name="full_name" value="{{ profile.full_name }}" required>
+
+        <label>Address Line 1</label>
+        <input name="address1" value="{{ profile.address1 }}" required>
+
+        <label>Address Line 2 (optional)</label>
+        <input name="address2" value="{{ profile.address2 }}">
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div>
+            <label>City</label>
+            <input name="city" value="{{ profile.city }}" required>
+          </div>
+          <div>
+            <label>State</label>
+            <input name="state" value="{{ profile.state }}" required>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div>
+            <label>Postal Code</label>
+            <input name="postal" value="{{ profile.postal }}" required>
+          </div>
+          <div>
+            <label>Phone</label>
+            <input name="phone" value="{{ profile.phone }}" required>
+          </div>
+        </div>
+
+        <button class="primary" type="submit">Save & Continue</button>
+      </form>
+      <p style="margin-top:8px;"><a href="{{ url_for('summary') }}">← Back to summary</a></p>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="toolbar">
+    <form method="get" action="{{ url_for('products') }}" class="search-form" id="searchForm">
+      <input id="searchBox" type="text" name="q" placeholder="Search products..." value="{{ query }}">
+      <button id="searchBtn" type="submit">Search</button>
+    </form>
+  </div>
+
+  <div class="grid">
+    {% for p in products %}
+      <div class="card product-card">
+        <img class="prod-image" src="{{ p.image }}" alt="{{ p.name }}">
+        <div class="pinfo">
+          <h3>{{ p.name }}</h3>
+          <p class="price">₹{{ p.price }}</p>
+          <div class="actions">
+            <form method="post" action="{{ url_for('add_to_cart', pid=p.id) }}" class="add-form" data-pid="{{ p.id }}">
+              <button id="addCartBtn-{{ p.id }}" class="btn primary" type="submit">Add to Cart</button>
+            </form>
+            <button class="btn secondary viewBtn" data-pid="{{ p.id }}">View</button>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <script>
+    // JS for "View" button
+    document.querySelectorAll('.viewBtn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const pid = btn.dataset.pid;
+        alert('Viewing product ID: ' + pid);
+        // Optional: redirect to a product details page
+        // window.location.href = '/product/' + pid;
+      });
+    });
+  </script>
+{% endblock %}

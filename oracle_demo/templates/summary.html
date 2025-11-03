@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="card">
+    <h2>Order Summary</h2>
+    {% if items %}
+      <ul class="cart-list">
+        {% for it in items %}
+          <li class="cart-item">
+            <img src="{{ it.image }}" alt="{{ it.name }}">
+            <div class="ci-info">
+              <div class="ci-name">{{ it.name }}</div>
+              <div class="ci-price">₹{{ it.price }}</div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+      <p class="total">Total: <strong>₹{{ total }}</strong></p>
+
+      <form method="get" action="{{ url_for('payment') }}">
+        <button class="primary" type="submit">Proceed to Payment</button>
+      </form>
+
+      <p class="help" style="margin-top:8px;">
+        Need to add shipping/contact info?
+        <a href="{{ url_for('account', next=url_for('payment')) }}">Complete account details</a>.
+      </p>
+
+      <p style="margin-top:8px;"><a href="{{ url_for('cart') }}">← Back to cart</a></p>
+    {% else %}
+      <p>No items to display.</p>
+    {% endif %}
+  </div>
+{% endblock %}

@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>CSS Demo Shop</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Siebel CSS Store</div>
+    <nav class="nav-right">
+      {% if session.username %}
+        <span class="hello">Hi <strong>{{ session.username }}</strong></span>
+        <a id="linkProducts" href="{{ url_for('products') }}">Products</a>
+        <a id="linkCart" href="{{ url_for('cart') }}">Cart ({{ session.cart|length if session.cart else 0 }})</a>
+        <a id="linkLogout" href="{{ url_for('logout') }}">Logout</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="messages">
+          {% for cat, msg in messages %}
+            <div class="msg {{ cat }}">{{ msg }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
+

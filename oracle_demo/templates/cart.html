@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="card">
+    <h2>Your Cart</h2>
+    {% if items %}
+      <ul class="cart-list">
+        {% for it in items %}
+          <li class="cart-item">
+            <img src="{{ it.image }}" alt="{{ it.name }}">
+            <div class="ci-info">
+              <div class="ci-name">{{ it.name }}</div>
+              <div class="ci-price">₹{{ it.price }}</div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+      <p class="total">Total: <strong>₹{{ total }}</strong></p>
+
+      <!-- Review Order -->
+      <form method="get" action="{{ url_for('summary') }}" style="margin-bottom:8px;">
+        <button class="primary" type="submit">Review Order</button>
+      </form>
+
+      <!-- Original simulate checkout -->
+      <form id="checkoutForm" method="post" action="{{ url_for('checkout') }}">
+        <button id="checkoutBtn" class="primary" type="submit">Checkout (simulate)</button>
+      </form>
+    {% else %}
+      <p>Your cart is empty.</p>
+    {% endif %}
+  </div>
+{% endblock %}

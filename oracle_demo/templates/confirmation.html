@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="center-card">
+    <div class="card" style="max-width:520px">
+      <h2>✅ Order Confirmed</h2>
+      <p>Your order has been placed successfully and will be shipped shortly.</p>
+      <form method="get" action="{{ url_for('logout') }}">
+        <button class="primary" type="submit">Logout</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

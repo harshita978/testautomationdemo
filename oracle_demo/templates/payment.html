@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="center-card">
+    <div class="card login-card" style="width:420px">
+      <h2>Payment</h2>
+      <p>Total Amount: <strong>₹{{ total }}</strong></p>
+      <form method="post" action="{{ url_for('pay_now') }}">
+        <label>Card Number</label>
+        <input placeholder="**** **** **** 1234" required>
+        <label>CVV</label>
+        <input type="password" placeholder="***" required>
+        <button class="primary" type="submit">Pay Now</button>
+      </form>
+      <p class="help" style="margin-top:8px;">Demo only — no real payment.</p>
+      <p style="margin-top:8px;"><a href="{{ url_for('summary') }}">← Back to summary</a></p>
+    </div>
+  </div>
+{% endblock %}

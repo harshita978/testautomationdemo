@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="center-card">
+    <div class="card login-card" style="width:420px">
+      <h2>Create Account</h2>
+      <form method="post" action="{{ url_for('register') }}">
+        <label>Username</label>
+        <input name="username" value="{{ username or '' }}" required>
+        <label>Password</label>
+        <input name="password" type="password" required>
+        <label>Confirm Password</label>
+        <input name="confirm" type="password" required>
+        <button class="primary" type="submit">Sign Up</button>
+      </form>
+      <p style="margin-top:8px;"><a href="{{ url_for('login') }}">← Back to login</a></p>
+    </div>
+  </div>
+{% endblock %}
