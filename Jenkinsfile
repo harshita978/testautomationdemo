@@ -3,29 +3,14 @@ pipeline {
 
   options {
     timeout(time: 30, unit: 'MINUTES')
-    ansiColor('xterm')
-  }
-
-  tools {
-    git 'DefaultGit'   // matches the name you set in Global Tool Configuration
-  }
-
-  environment {
-    // add anything you need here, e.g. TEST_ENV = 'dev'
+    timestamps()
   }
 
   stages {
     stage('Checkout') {
       steps {
-        checkout([
-          $class: 'GitSCM',
-          branches: [[name: '*/main']],
-          userRemoteConfigs: [[
-            url: 'https://github.com/<your-username>/<repo>.git',
-            // remove the next line if your repo is public
-            credentialsId: 'github-pat'
-          ]]
-        ])
+        // If your default branch is main:
+        git branch: 'main', url: 'https://github.com/harshita978/testautomationdemo.git'
         bat 'git --version'
       }
     }
@@ -33,21 +18,19 @@ pipeline {
     stage('Build') {
       steps {
         bat 'echo Building...'
-        // bat 'mvn -B -DskipTests package'   // example for Maven
       }
     }
 
     stage('Test') {
       steps {
         bat 'echo Running tests...'
-        // bat 'pytest -q'                    // example for Python
-        // junit 'reports/**/*.xml'           // publish results if you produce JUnit XML
+        // If you later output JUnit XML, publish with: junit 'reports/**/*.xml'
       }
     }
 
     stage('Archive') {
       steps {
-        archiveArtifacts artifacts: 'dist/**, build/**, target/**/*.jar', onlyIfSuccessful: true
+        archiveArtifacts artifacts: 'dist/**, build/**, target/**', onlyIfSuccessful: true
       }
     }
   }
