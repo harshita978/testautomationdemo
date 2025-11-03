@@ -525,7 +525,7 @@ def run_all():
                 if SCREENSHOT_ON_SUCCESS_END and status == "PASS":
                     final_ss = take_screenshot(page, run_ss_folder, "final_page")
 
-                print(f"  {'✅' if status=='PASS' else '❌'} Run {idx} {status}")
+                print(f"  {'Pass' if status=='PASS' else 'Fail'} Run {idx} {status}")
 
             except Exception as e:
                 status = "FAIL"
