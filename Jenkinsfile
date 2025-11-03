@@ -4,19 +4,18 @@ pipeline {
   options {
     timeout(time: 30, unit: 'MINUTES')
     timestamps()
-    skipDefaultCheckout(true)   // Jenkins won't auto-checkout; we do it below
+    skipDefaultCheckout(true)
   }
 
   stages {
     stage('Checkout') {
       steps {
-        // Add Git to PATH only for this block (matches your install path)
         withEnv(['PATH+GIT=C:\\Program Files\\Git\\bin']) {
           checkout([$class: 'GitSCM',
             branches: [[name: '*/main']],
             userRemoteConfigs: [[
               url: 'https://github.com/harshita978/testautomationdemo.git',
-              // If your repo is PUBLIC, you can remove the next line
+              // Remove credentialsId line if repo is public
               credentialsId: 'github-pat'
             ]]
           ])
@@ -27,22 +26,27 @@ pipeline {
 
     stage('Build') {
       steps {
-        bat 'echo Building...'
-        // e.g., bat 'mvn -B -DskipTests package'
+        bat '''
+          echo Building...
+          if not exist build mkdir build
+          echo Demo artifact from Jenkins > build\\artifact.txt
+        '''
       }
     }
 
     stage('Test') {
       steps {
         bat 'echo Running tests...'
-        // e.g., bat 'pytest -q'
-        // If you generate JUnit XML, publish with: junit 'reports/**/*.xml'
+        // If you later emit JUnit XML, publish with: junit 'reports/**/*.xml'
       }
     }
 
     stage('Archive') {
       steps {
-        archiveArtifacts artifacts: 'dist/**, build/**, target/**', onlyIfSuccessful: true
+        // We created build\\artifact.txt above, so this will succeed
+        archiveArtifacts artifacts: 'build/**', onlyIfSuccessful: true
+        // If you prefer to never fail when empty, use:
+        // archiveArtifacts artifacts: 'dist/**, build/**, target/**', allowEmptyArchive: true, onlyIfSuccessful: true
       }
     }
   }
