@@ -1,0 +1,89 @@
+[
+  {
+    "pageTitle": "Siebel Call Center",
+    "pageUrl": "https://celvpvm04294.us.oracle.com:9001/siebel/app/callcenter/enu?SWECmd=Start&",
+    "selector": "#s_swepi_1",
+    "timestamp": 1759171208171,
+    "type": "click"
+  },
+  {
+    "pageTitle": "Siebel Call Center",
+    "pageUrl": "https://celvpvm04294.us.oracle.com:9001/siebel/app/callcenter/enu?SWECmd=Start&",
+    "selector": "#s_swepi_1",
+    "timestamp": 1759171210849,
+    "type": "fill",
+    "value": "SADMIN"
+  },
+  {
+    "pageTitle": "Siebel Call Center",
+    "pageUrl": "https://celvpvm04294.us.oracle.com:9001/siebel/app/callcenter/enu?SWECmd=Start&",
+    "selector": "#s_swepi_2",
+    "timestamp": 1759171213731,
+    "type": "fill",
+    "value": "SIEBEL"
+  },
+  {
+      "pageTitle": "Siebel Call Center",
+      "pageUrl": "https://celvpvm04294.us.oracle.com:9001/siebel/app/callcenter/enu?SWECmd=Start&",
+      "selector": "#s_swepi_22",
+      "type": "click"
+  },
+  {
+    "pageTitle": "Siebel Web Call Center Home",
+    "pageUrl": "https://celvpvm04294.us.oracle.com:9001/siebel/app/callcenter/enu?SWECmd=GotoView&SWEView=Home+Page+View+(WCC)&SWERF=1&SWEHo=&SWEBU=1",
+    "selector": "#j_s_sctrl_tabScreen",
+    "timestamp": 1759171323916,
+    "type": "click"
+  },
+  {
+    "pageTitle": "Siebel Web Call Center Home",
+    "pageUrl": "https://celvpvm04294.us.oracle.com:9001/siebel/app/callcenter/enu?SWECmd=GotoView&SWEView=Home+Page+View+(WCC)&SWERF=1&SWEHo=&SWEBU=1",
+    "selector": "#j_s_sctrl_tabScreen",
+    "timestamp": 1759171327781,
+    "type": "fill",
+    "value": "tabScreen9"
+  },
+  {
+    "pageTitle": "Service Requests Home:",
+    "pageUrl": "https://celvpvm04294.us.oracle.com:9001/siebel/app/callcenter/enu?SWECmd=GotoView&SWEView=Service+Request+Screen+Homepage+View&SWERF=1&SWEHo=&SWEBU=1&SWEApplet0=ServiceRequest+Home+Public+and+Private+View+Link+List+Applet&SWERowId0=VRId-0",
+    "timestamp": 1759171328622,
+    "type": "goto",
+    "url": "https://celvpvm04294.us.oracle.com:9001/siebel/app/callcenter/enu?SWECmd=GotoView&SWEView=Service+Request+Screen+Homepage+View&SWERF=1&SWEHo=&SWEBU=1&SWEApplet0=ServiceRequest+Home+Public+and+Private+View+Link+List+Applet&SWERowId0=VRId-0"
+  },
+  {
+    "pageTitle": "Service Requests Home",
+    "pageUrl": "https://celvpvm04294.us.oracle.com:9001/siebel/app/callcenter/enu?SWECmd=GotoView&SWEView=Service+Request+Screen+Homepage+View&SWERF=1&SWEHo=&SWEBU=1&SWEApplet0=ServiceRequest+Home+Public+and+Private+View+Link+List+Applet&SWERowId0=VRId-0",
+    "selector": "button[aria-label='Service Request Home']",
+    "type": "click",
+    "description": "Click the Service Request Home button in the toolbar"
+  },
+
+  {
+    "pageTitle": "My Service Requests: 1-69781",
+    "pageUrl": "https://celvpvm04294.us.oracle.com:9001/siebel/app/callcenter/enu?SWECmd=GotoView&SWEView=Personal+Service+Request+List+View&SWERF=1&SWEHo=&SWEBU=1&SWEApplet0=Service+Request+List+Applet&SWERowId0=1-1HUD",
+    "timestamp": 1759171337722,
+    "type": "goto",
+    "url": "https://celvpvm04294.us.oracle.com:9001/siebel/app/callcenter/enu?SWECmd=GotoView&SWEView=Personal+Service+Request+List+View&SWERF=1&SWEHo=&SWEBU=1&SWEApplet0=Service+Request+List+Applet&SWERowId0=1-1HUD"
+  },
+  {
+    "pageTitle": "My Service Requests: 1-69781",
+    "pageUrl": "https://celvpvm04294.us.oracle.com:9001/siebel/app/callcenter/enu?SWECmd=GotoView&SWEView=Personal+Service+Request+List+View&SWERF=1&SWEHo=&SWEBU=1&SWEApplet0=Service+Request+List+Applet&SWERowId0=1-1HUD",
+    "selector": "#1_s_2_l_SR_Number",
+    "timestamp": 1759171341124,
+    "type": "click"
+  },
+  {
+    "pageTitle": "My Service Requests: 1-69781",
+    "pageUrl": "https://celvpvm04294.us.oracle.com:9001/siebel/app/callcenter/enu?SWECmd=GotoView&SWEView=Personal+Service+Request+List+View&SWERF=1&SWEHo=&SWEBU=1&SWEApplet0=Service+Request+List+Applet&SWERowId0=1-1HUD",
+    "selector": "#tb_0",
+    "timestamp": 1759171343993,
+    "type": "click"
+  },
+  {
+    "pageTitle": "My Service Requests: 1-69781",
+    "pageUrl": "https://celvpvm04294.us.oracle.com:9001/siebel/app/callcenter/enu?SWECmd=GotoView&SWEView=Personal+Service+Request+List+View&SWERF=1&SWEHo=&SWEBU=1&SWEApplet0=Service+Request+List+Applet&SWERowId0=1-1HUD",
+    "selector": ".siebui-ctrl-btn.appletButton.siebui-btn-logout",
+    "timestamp": 1759171346242,
+    "type": "click"
+  }
+]

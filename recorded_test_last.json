@@ -1,0 +1,68 @@
+[
+  {
+    "pageTitle": "CSS Demo Shop",
+    "pageUrl": "http://192.168.29.63:5000/",
+    "selector": "#username",
+    "timestamp": 1759090336262,
+    "type": "click"
+  },
+  {
+    "pageTitle": "CSS Demo Shop",
+    "pageUrl": "http://192.168.29.63:5000/",
+    "selector": "#username",
+    "timestamp": 1759090338334,
+    "type": "fill",
+    "value": "{{username}}"
+  },
+  {
+    "pageTitle": "CSS Demo Shop",
+    "pageUrl": "http://192.168.29.63:5000/",
+    "selector": "#password",
+    "timestamp": 1759090338650,
+    "type": "click"
+  },
+  {
+    "pageTitle": "CSS Demo Shop",
+    "pageUrl": "http://192.168.29.63:5000/",
+    "selector": "#password",
+    "timestamp": 1759090342377,
+    "type": "fill",
+    "value": "{{password}}"
+  },
+  {
+    "pageTitle": "CSS Demo Shop",
+    "pageUrl": "http://192.168.29.63:5000/",
+    "selector": "#loginBtn",
+    "timestamp": 1759090343586,
+    "type": "click"
+  },
+  {
+    "pageTitle": "CSS Demo Shop",
+    "pageUrl": "http://192.168.29.63:5000/products",
+    "selector": "button[id^='addCartBtn']",
+    "timestamp": 1759090345531,
+    "type": "click"
+  },
+  
+  {
+    "pageTitle": "CSS Demo Shop",
+    "pageUrl": "http://192.168.29.63:5000/products",
+    "selector": "#linkCart",
+    "timestamp": 1759090350590,
+    "type": "click"
+  },
+  {
+    "pageTitle": "CSS Demo Shop",
+    "pageUrl": "http://192.168.29.63:5000/cart",
+    "selector": "#checkoutBtn",
+    "timestamp": 1759090352137,
+    "type": "click"
+  },
+  {
+    "pageTitle": "CSS Demo Shop",
+    "pageUrl": "http://192.168.29.63:5000/",
+    "selector": "#linkLogout",
+    "timestamp": 1759090354275,
+    "type": "click"
+  }
+]

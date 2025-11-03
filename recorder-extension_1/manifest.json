@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Recorder",
+  "version": "1.0",
+  "permissions": ["scripting", "activeTab"],
+  "host_permissions": ["https://www.flipkart.com/*","https://www.redbus.in/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://www.flipkart.com/*","https://www.redbus.in/*"],
+      "js": ["recorder_content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}

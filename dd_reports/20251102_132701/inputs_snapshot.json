@@ -1,0 +1,224 @@
+{
+  "actions": [
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/",
+      "selector": "#username",
+      "timestamp": 1759773448818,
+      "type": "click"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/",
+      "selector": "#username",
+      "timestamp": 1759773451767,
+      "type": "fill",
+      "value": "{{username}}"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/",
+      "selector": "#password",
+      "timestamp": 1759773453283,
+      "type": "fill",
+      "value": "us"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/",
+      "selector": "#password",
+      "timestamp": 1759773455800,
+      "type": "fill",
+      "value": "{{password}}"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/",
+      "selector": "#loginBtn",
+      "timestamp": 1759773456760,
+      "type": "click"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/products",
+      "selector": "#searchBox",
+      "timestamp": 1759833469155,
+      "type": "click"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/products",
+      "selector": "#searchBox",
+      "timestamp": 1759833473365,
+      "type": "fill",
+      "value": "{{product_query}}"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/products",
+      "selector": "#searchBtn",
+      "timestamp": 1759833474761,
+      "type": "click"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/products?q=Implementing+AI",
+      "selector": "button[id^='addCartBtn'] >> nth=0",
+      "timestamp": 1759833476574,
+      "type": "click"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/products",
+      "selector": "#linkCart",
+      "timestamp": 1759773464293,
+      "type": "click"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/cart",
+      "selector": ".primary",
+      "timestamp": 1759773466662,
+      "type": "click"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/summary?",
+      "selector": ".help a[href*=\"/account?next=/payment\"]",
+      "timestamp": 1759773472715,
+      "type": "click"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/account?next=/payment",
+      "type": "waitFor",
+      "selector": "[name=\"full_name\"]",
+      "timeout": 8000
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/account?next=/payment",
+      "selector": "[name=\"full_name\"]",
+      "timestamp": 1759773476298,
+      "type": "click"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/account?next=/payment",
+      "selector": ".center-card",
+      "timestamp": 1759773478886,
+      "type": "click"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/account?next=/payment",
+      "selector": "[name=\"full_name\"]",
+      "timestamp": 1759773483038,
+      "type": "fill",
+      "value": "Aditya Jain"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/account?next=/payment",
+      "selector": "[name=\"address1\"]",
+      "timestamp": 1759773487739,
+      "type": "fill",
+      "value": "Kalpataru estate"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/account?next=/payment",
+      "selector": "[name=\"address1\"]",
+      "timestamp": 1759773489902,
+      "type": "fill",
+      "value": "Kalpataru estate phase 1, Pune"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/account?next=/payment",
+      "selector": "[name=\"city\"]",
+      "timestamp": 1759773494683,
+      "type": "fill",
+      "value": "Pune"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/account?next=/payment",
+      "selector": "[name=\"state\"]",
+      "timestamp": 1759773497292,
+      "type": "fill",
+      "value": "Maharashtra"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/account?next=/payment",
+      "selector": "[name=\"postal\"]",
+      "timestamp": 1759773499975,
+      "type": "fill",
+      "value": "400161"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/account?next=/payment",
+      "selector": "[name=\"phone\"]",
+      "timestamp": 1759773503880,
+      "type": "fill",
+      "value": "1234567890"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/account?next=/payment",
+      "selector": ".primary",
+      "timestamp": 1759773505368,
+      "type": "click"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/payment",
+      "selector": "input",
+      "timestamp": 1759773507705,
+      "type": "click"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/payment",
+      "type": "waitFor",
+      "selector": "input[placeholder*=\"****\"]:not([type=\"password\"])",
+      "timeout": 8000
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/payment",
+      "type": "fill",
+      "selector": "input[placeholder*=\"****\"]:not([type=\"password\"])",
+      "value": "{{cc_num}}"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/payment",
+      "type": "waitFor",
+      "selector": "label:has-text(\"CVV\") + input, input[type=\"password\"][placeholder*=\"***\"]",
+      "timeout": 8000
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/payment",
+      "type": "fill",
+      "selector": "label:has-text(\"CVV\") + input, input[type=\"password\"][placeholder*=\"***\"]",
+      "value": "{{cc_cvv}}"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/payment",
+      "type": "click",
+      "selector": ".primary"
+    },
+    {
+      "pageTitle": "CSS Demo Shop",
+      "pageUrl": "http://localhost:5000/order-confirmation",
+      "selector": ".primary",
+      "timestamp": 1759773522043,
+      "type": "click"
+    }
+  ]
+}
