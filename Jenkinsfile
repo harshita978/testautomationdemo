@@ -9,21 +9,23 @@ pipeline {
 
   environment {
     // Fast defaults your script can read (optional)
-    WAIT_TIMEOUT = '3000'
+    WAIT_TIMEOUT = '30000'          // give app up to 30s to boot
     NAV_TIMEOUT  = '7000'
     SCREENSHOT_EVERY_ACTION   = 'false'
     SCREENSHOT_ON_FAILURE     = 'true'
     SCREENSHOT_ON_SUCCESS_END = 'false'
     FULL_PAGE_SHOTS           = 'false'
-    START_URL = ''   // set if you want to override inside CI
+    START_URL = ''             // override if needed (e.g. http://127.0.0.1:5000)
     PYTHONDONTWRITEBYTECODE = '1'
-    PYTHONUNBUFFERED = '1'
+    PYTHONUNBUFFERED        = '1'
+
+    // App path (lowercase as you confirmed)
+    APP_DIR = 'oracle_demo'
   }
 
   stages {
     stage('Checkout') {
       steps {
-        // Ensure Git is on PATH (adjust path if your Git is elsewhere)
         withEnv(['PATH+GIT=C:\\Program Files\\Git\\bin']) {
           checkout([$class: 'GitSCM',
             branches: [[name: '*/main']],
@@ -39,7 +41,6 @@ pipeline {
 
     stage('Detect project folder') {
       steps {
-        // Figure out where runtest_data_driven_template.py lives (root vs subfolder)
         bat '''
           setlocal EnableDelayedExpansion
           if exist runtest_data_driven_template.py (
@@ -57,11 +58,10 @@ pipeline {
 
     stage('Setup Python & Playwright') {
       steps {
-        // If Python isn't on PATH for the Jenkins service, add it here:
-        // withEnv(['PATH+PY=C:\\Python311;C:\\Python311\\Scripts']) { ... }
         bat '''
           for /f "usebackq delims=" %%A in ("run_dir.txt") do set %%A
           echo Using RUN_DIR=%RUN_DIR%
+          echo Using APP_DIR=%APP_DIR%
 
           python -V
           python -m pip install -U pip setuptools wheel
@@ -73,8 +73,8 @@ pipeline {
           )
 
           rem Install app deps if present
-          if exist oracle_demo\\requirements.txt (
-            python -m pip install -r oracle_demo\\requirements.txt
+          if exist %APP_DIR%\\requirements.txt (
+            python -m pip install -r %APP_DIR%\\requirements.txt
           )
 
           rem Install browsers (Windows: no --with-deps)
@@ -83,12 +83,12 @@ pipeline {
       }
     }
 
-    // Start the Flask app first (single-line PowerShell to avoid ^ issues)
     stage('Start oracle_demo app') {
       steps {
         bat '''
-          if not exist oracle_demo\\app.py (
-            echo ERROR: oracle_demo\\app.py not found. Check repo layout.
+          if not exist %APP_DIR%\\app.py (
+            echo ERROR: %APP_DIR%\\app.py not found. Check repo layout.
+            dir /b %APP_DIR%
             exit /b 1
           )
 
@@ -97,8 +97,8 @@ pipeline {
           if "%APP_URL%"=="" set "APP_URL=http://127.0.0.1:5000"
           echo Will wait for APP_URL=%APP_URL%
 
-          rem Launch app in background and capture PID
-          powershell -NoProfile -ExecutionPolicy Bypass -Command "$p = Start-Process -FilePath 'python' -ArgumentList 'app.py' -WorkingDirectory 'oracle_demo' -PassThru; [IO.File]::WriteAllText('app_pid.txt', $p.Id.ToString()); Write-Host ('App PID: ' + $p.Id)"
+          rem Launch app in background and capture PID (single-line PowerShell)
+          powershell -NoProfile -ExecutionPolicy Bypass -Command "$p = Start-Process -FilePath 'python' -ArgumentList 'app.py' -WorkingDirectory '%APP_DIR%' -PassThru; [IO.File]::WriteAllText('app_pid.txt', $p.Id.ToString()); Write-Host ('App PID: ' + $p.Id)"
 
           rem Wait until app responds, up to WAIT_TIMEOUT ms
           powershell -NoProfile -ExecutionPolicy Bypass -Command "$deadline=(Get-Date).AddMilliseconds([int]$env:WAIT_TIMEOUT); while((Get-Date) -lt $deadline){ try{ iwr -Uri $env:APP_URL -UseBasicParsing -TimeoutSec 2 ^| Out-Null; exit 0 } catch { Start-Sleep -Milliseconds 300 } }; exit 1"
@@ -125,7 +125,6 @@ pipeline {
 
     stage('Archive Reports') {
       steps {
-        // Try both possible locations; allow empty to avoid failing archive if path differs
         archiveArtifacts artifacts: 'dd_reports/**', allowEmptyArchive: true, onlyIfSuccessful: false
         archiveArtifacts artifacts: 'test-automation-demo/dd_reports/**', allowEmptyArchive: true, onlyIfSuccessful: false
       }
@@ -135,7 +134,6 @@ pipeline {
   post {
     always {
       echo "Pipeline finished with status: ${currentBuild.currentResult}"
-      // Gracefully stop the app we started
       bat '''
         if exist app_pid.txt (
           for /f "usebackq delims=" %%P in ("app_pid.txt") do set APPPID=%%P
