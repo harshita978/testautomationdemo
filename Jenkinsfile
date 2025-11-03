@@ -72,7 +72,7 @@ pipeline {
             python -m pip install playwright reportlab matplotlib
           )
 
-          rem --- NEW: install app deps if present
+          rem Install app deps if present
           if exist oracle_demo\\requirements.txt (
             python -m pip install -r oracle_demo\\requirements.txt
           )
@@ -83,7 +83,7 @@ pipeline {
       }
     }
 
-    // --- NEW: bring up the Flask app first ---
+    // Start the Flask app first (single-line PowerShell to avoid ^ issues)
     stage('Start oracle_demo app') {
       steps {
         bat '''
@@ -92,24 +92,16 @@ pipeline {
             exit /b 1
           )
 
-          rem pick URL: use START_URL if set, else default to http://127.0.0.1:5000
+          rem Pick URL: use START_URL if set, else default to http://127.0.0.1:5000
           set "APP_URL=%START_URL%"
           if "%APP_URL%"=="" set "APP_URL=http://127.0.0.1:5000"
           echo Will wait for APP_URL=%APP_URL%
 
-          rem launch app in background and capture PID
-          powershell -NoProfile -ExecutionPolicy Bypass ^
-            "$p = Start-Process -FilePath 'python' -ArgumentList 'app.py' -WorkingDirectory 'oracle_demo' -PassThru; ^
-             $p.Id | Out-File -FilePath app_pid.txt -Encoding ascii; ^
-             Write-Host ('App PID: ' + $p.Id)"
+          rem Launch app in background and capture PID
+          powershell -NoProfile -ExecutionPolicy Bypass -Command "$p = Start-Process -FilePath 'python' -ArgumentList 'app.py' -WorkingDirectory 'oracle_demo' -PassThru; [IO.File]::WriteAllText('app_pid.txt', $p.Id.ToString()); Write-Host ('App PID: ' + $p.Id)"
 
-          rem wait up to WAIT_TIMEOUT ms for app to respond
-          powershell -NoProfile -ExecutionPolicy Bypass ^
-            "$deadline = (Get-Date).AddMilliseconds([int]$env:WAIT_TIMEOUT); ^
-             while ((Get-Date) -lt $deadline) { ^
-               try { Invoke-WebRequest -Uri $env:APP_URL -UseBasicParsing -TimeoutSec 2 | Out-Null; exit 0 } ^
-               catch { Start-Sleep -Milliseconds 300 } ^
-             }; exit 1"
+          rem Wait until app responds, up to WAIT_TIMEOUT ms
+          powershell -NoProfile -ExecutionPolicy Bypass -Command "$deadline=(Get-Date).AddMilliseconds([int]$env:WAIT_TIMEOUT); while((Get-Date) -lt $deadline){ try{ iwr -Uri $env:APP_URL -UseBasicParsing -TimeoutSec 2 ^| Out-Null; exit 0 } catch { Start-Sleep -Milliseconds 300 } }; exit 1"
           if errorlevel 1 (
             echo ERROR: App did not become ready on %APP_URL% within %WAIT_TIMEOUT% ms
             type app_pid.txt
@@ -119,7 +111,6 @@ pipeline {
         '''
       }
     }
-    // --- END NEW ---
 
     stage('Run tests') {
       steps {
@@ -144,13 +135,13 @@ pipeline {
   post {
     always {
       echo "Pipeline finished with status: ${currentBuild.currentResult}"
-      // NEW: gracefully stop the app we started
+      // Gracefully stop the app we started
       bat '''
         if exist app_pid.txt (
-          set /p APPPID=<app_pid.txt
+          for /f "usebackq delims=" %%P in ("app_pid.txt") do set APPPID=%%P
           if not "%APPPID%"=="" (
             echo Stopping app PID %APPPID%
-            powershell -NoProfile -ExecutionPolicy Bypass "Try { Stop-Process -Id %APPPID% -Force -ErrorAction SilentlyContinue } Catch { }"
+            powershell -NoProfile -ExecutionPolicy Bypass -Command "Try { Stop-Process -Id $env:APPPID -Force -ErrorAction SilentlyContinue } Catch { }"
           )
         )
       '''
