@@ -23,8 +23,8 @@ BASE_DIR = r"C:\Users\Harshita Paliwal\Documents\TestAutomation\test-automation-
 ACTIONS_FILE = "recorded_test.json"     # generic recorded actions (your JSON)
 DATA_CSV     = "users.csv"              # test data CSV (headers must match placeholders)
 REPORT_DIR   = "dd_reports"             # will be placed inside BASE_DIR
-WAIT_TIMEOUT = 3000
-NAV_TIMEOUT  = 7000
+WAIT_TIMEOUT = 2000
+NAV_TIMEOUT  = 5000
 
 # Optional: force script to start at a particular URL (set to None to use JSON first pageUrl)
 START_URL = "http://127.0.0.1:5000"     # e.g. "http://192.168.29.63:5000/"
@@ -199,7 +199,8 @@ def do_action(page, action, row, next_action_pageUrl=None):
         print(f"    -> click {render(selector,row)} (max_click={max_click})")
         return
 
-    print(f"    ⚠ skipping unknown action type: {a_type}")
+    # replaced emoji with ASCII
+    print(f"    [WARN] skipping unknown action type: {a_type}")
 
 # ------------ Reporting structures ------------
 
@@ -525,7 +526,8 @@ def run_all():
                 if SCREENSHOT_ON_SUCCESS_END and status == "PASS":
                     final_ss = take_screenshot(page, run_ss_folder, "final_page")
 
-                print(f"  {'Pass' if status=='PASS' else 'Fail'} Run {idx} {status}")
+                # replaced emojis with ASCII
+                print(f"  [{'PASS' if status=='PASS' else 'FAIL'}] Run {idx} {status}")
 
             except Exception as e:
                 status = "FAIL"
@@ -583,7 +585,7 @@ def run_all():
 
     print(f"\nAll artifacts saved under: {run_folder}")
 
-     # ---- CI-friendly exit code (add this block) ----
+    # ---- CI-friendly exit code (add this block) ----
     if any(r.status == "FAIL" for r in results):
         import sys
         sys.exit(1)
