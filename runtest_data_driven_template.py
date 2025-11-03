@@ -23,8 +23,8 @@ BASE_DIR = r"C:\Users\Harshita Paliwal\Documents\TestAutomation\test-automation-
 ACTIONS_FILE = "recorded_test.json"     # generic recorded actions (your JSON)
 DATA_CSV     = "users.csv"              # test data CSV (headers must match placeholders)
 REPORT_DIR   = "dd_reports"             # will be placed inside BASE_DIR
-WAIT_TIMEOUT = 2000
-NAV_TIMEOUT  = 5000
+WAIT_TIMEOUT = 3000
+NAV_TIMEOUT  = 7000
 
 # Optional: force script to start at a particular URL (set to None to use JSON first pageUrl)
 START_URL = "http://127.0.0.1:5000"     # e.g. "http://192.168.29.63:5000/"
